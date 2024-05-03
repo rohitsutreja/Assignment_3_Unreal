@@ -86,7 +86,7 @@ void ATopDownPawn::HandleZoom(const FInputActionValue& value) {
 
 	if (!IsOnGround) {
 		auto NewOffset = OldOffset - FVector{ 0,0,val * 30 };
-		NewOffset.Z = FMath::Clamp(NewOffset.Z, 50, 2500);
+		NewOffset.Z = FMath::Clamp(NewOffset.Z, 200, 2500);
 
 		auto DeltaAngle = asin((val * 30) / ArmLength) * 57.2958;
 
@@ -94,23 +94,23 @@ void ATopDownPawn::HandleZoom(const FInputActionValue& value) {
 
 		if (NewOffset.Z <= 700) {
 			auto NewRotation = Camera->GetRelativeRotation() + FRotator(DeltaAngle, 0, 0);
-			NewRotation.Pitch = FMath::ClampAngle(NewRotation.Pitch, -40.f, 0.f);
+			NewRotation.Pitch = FMath::ClampAngle(NewRotation.Pitch, -40.f, -5.f);
 			Camera->SetRelativeRotation(NewRotation);
 
 
-			if (NewOffset.Z == 50) {
+			if (NewOffset.Z == 200) {
 				IsOnGround = true;
 			}
 		}
-	} 
+	}
 	else { // In case we hit the ground, will change arm length only.
 		auto NewArmLength = ArmLength - val * 30;
 
-		NewArmLength = FMath::Clamp(NewArmLength, 10, 500);
+		NewArmLength = FMath::Clamp(NewArmLength, 10, 700);
 		SpringArm->TargetArmLength = NewArmLength;
 
-		if (NewArmLength == 500) {
-			SpringArm->TargetOffset = { 0,0,51 };
+		if (NewArmLength == 700) {
+			SpringArm->TargetOffset = { 0,0,201 };
 			IsOnGround = false;
 		}
 	}
